@@ -14,10 +14,11 @@ private:
 	int durationInSeconds;
 
 public:
+	Track(string name, tm* dateOfCreate, int durationInSeconds);
 	string GetName();
 	tm* GetDateOfCreate();
 	int GetDuration();
-	void SetName(string name);
-	void SetDateOfCreate(tm &dateOfCreate);
-	void SetDuration(int durationInSeconds);
+	//void SetName(string name);
+	//void SetDateOfCreate(tm &dateOfCreate);
+	//void SetDuration(int durationInSeconds);
 };

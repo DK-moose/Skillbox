@@ -10,8 +10,9 @@ private:
 	string name;
 
 public:
+	Record(string number, string name);
 	string GetNumber();
 	string GetName();
-	void SetNumber(string number);
-	void SetName(string name);
+	//void SetNumber(string number);
+	//void SetName(string name);
 };

@@ -18,54 +18,57 @@ bool Phone::IsNumber(string number)
 	
 }
 
-map<string, string>* Phone::GetDirectory()
+void Phone::RemoveDir()
 {
-	return &directory;
+	for (int i = 0; i < directory.size(); i++)
+		delete directory[i];
 }
 
-void Phone::SetDirectory(map<string, string> &directory)
-{
-	this->directory = directory;
-}
-
-void Phone::Add(Record &record)
+void Phone::Add(Record *record)
 {	
-	for(map<string, string>::iterator it = directory.begin(); it != directory.end(); ++it)
+	for(int i = 0; i < directory.size(); i++)
 	{
-		if (it->first == record.GetNumber() || it->second == record.GetName())
+		if (directory[i]->GetNumber() == record->GetNumber() || directory[i]->GetName() == record->GetName())
 		{
 			cout << "This contact already exists!" << endl;
 			return;
 		}
 	}
-	pair<string, string> oRec(record.GetNumber(), record.GetName());
-	directory.insert(oRec);
+	directory.push_back(record);
 }
 
 void Phone::Call(string nameOrPhone)
 {
-	if (IsNumber(nameOrPhone))
+	for (int i = 0; i < directory.size(); i++)
 	{
-		cout << "CALL " << nameOrPhone << endl;
-		return;
-	}
-	else
-	{		
-		for(map<string, string>::iterator it = directory.begin(); it != directory.end(); ++it)
+		if (directory[i]->GetNumber() == nameOrPhone || directory[i]->GetName() == nameOrPhone)
 		{
-			if (it->first == nameOrPhone || it->second == nameOrPhone)
-			{
-				cout << "CALL " << it->first << endl;
-				return;
-			}
+			cout << "CALL " << directory[i]->GetName() << endl;
+			return;
 		}
-		cout << "There is no such contact!" << endl;
 	}
+	if (IsNumber(nameOrPhone))
+		cout << "CALL " << nameOrPhone << endl;
+	else
+		cout << "Invalid number!" << endl;
 }
 
 void Phone::Sms(string nameOrPhone)
 {
 	string sms;
+	for (int i = 0; i < directory.size(); i++)
+	{
+		if (directory[i]->GetNumber() == nameOrPhone || directory[i]->GetName() == nameOrPhone)
+		{
+			cout << "Input sms: " << endl;
+			while (sms != "-1")
+			{
+				cin >> sms;
+			}
+			cout << "SENT" << endl;
+			return;
+		}
+	}
 	if (IsNumber(nameOrPhone))
 	{
 		cout << "Input sms (input '-1' for end): " << endl;
@@ -77,20 +80,6 @@ void Phone::Sms(string nameOrPhone)
 		return;
 	}
 	else
-	{
-		for (map<string, string>::iterator it = directory.begin(); it != directory.end(); ++it)
-		{
-			if (it->first == nameOrPhone || it->second == nameOrPhone)
-			{
-				cout << "Input sms: " << endl;
-				while (sms != "-1")
-				{
-					cin >> sms;
-				}
-				cout << "SENT" << endl;
-				return;
-			}
-		}
-		cout << "There is no such contact!" << endl;
-	}
+		cout << "Invalid number!" << endl;
+
 }

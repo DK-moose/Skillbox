@@ -4,20 +4,18 @@
 #include <vector>
 #include <iomanip>
 #include "track.h"
-#define PLAY 1
-#define PAUSE 2
-#define STOP 0
+enum player_condition{ stop = 0, play, pause};
 
 using namespace std;
 class Player
 {
 private:
-	vector<Track> records;
+	vector<Track*> records;
 
 public:
-	int playerCondition;
-	vector<Track>* GetRecords();
-	void SetRecords(vector<Track> &records);
+	int player_c;
+	void AddRecord(Track *records);
+	void RemoveRecords();
 	string Play(string str);
 	void Pause();
 	string Next();
