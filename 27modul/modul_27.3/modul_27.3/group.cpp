@@ -55,7 +55,7 @@ void Group::InitWorkers()
 int Group::GetBusyWorkers()
 {
 	int index = 0;
-	while (!workers[index]->GetWorkerFlag())
+	while (index < workers.size() && workers[index]->GetWorkerFlag())
 		index++;
 	return index;
 }
@@ -68,7 +68,7 @@ void Group::PrintInformation()
 	for (int i = 0; i < numberOfWorkers; i++)
 	{
 		cout << i + 1 << " worker: ";
-		if (!this->GetWorker(i)->GetWorkerFlag()) cout << "busy, ";
+		if (this->GetWorker(i)->GetWorkerFlag()) cout << "busy, ";
 		else cout << "free, ";
 		cout << "type of task - " << this->GetWorker(i)->GetTypeTask() << endl;
 	}
