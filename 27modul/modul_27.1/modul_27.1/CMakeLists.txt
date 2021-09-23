@@ -1,0 +1,10 @@
+﻿# CMakeList.txt: проект CMake для modul_27.1; включите исходный код и определения,
+# укажите здесь логику для конкретного проекта.
+#
+cmake_minimum_required (VERSION 3.8)
+
+# Добавьте источник в исполняемый файл этого проекта.
+add_executable (modul271 "main.cpp" "elfhouse.h" "elfhouse.cpp"
+				    "branch.h" "branch.cpp")
+
+# TODO: Добавьте тесты и целевые объекты, если это необходимо.
