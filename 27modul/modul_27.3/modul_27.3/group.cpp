@@ -16,16 +16,6 @@ void Group::SetNumberOfWorkers(int numberOfWorkers)
 	this->numberOfWorkers = numberOfWorkers;
 }
 
-Manager* Group::GetManager()
-{
-	return manager;
-}
-
-void Group::SetManager(Manager *manager)
-{
-	this->manager = manager;
-}
-
 vector<Worker*>* Group::GetWorkers()
 {
 	return &workers;
@@ -62,8 +52,6 @@ int Group::GetBusyWorkers()
 
 void Group::PrintInformation()
 {
-	cout << "Director command - " << manager->GetDirector()->GetIdCommand() << endl;
-	cout << "Manager serial number - " << manager->GetSerialNumber() << endl;
 	cout << "Number of workers - " << numberOfWorkers << endl;
 	for (int i = 0; i < numberOfWorkers; i++)
 	{

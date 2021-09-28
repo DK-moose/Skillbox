@@ -1,16 +1,15 @@
 #pragma once
-#include "director.h"
+#include "group.h"
 #include <cstdlib>
 
 class Manager
 {
 private: 
 	int serial_number;
-	Director *director;
+	Group *group;
 
 public:
-	Manager(int serial_number, Director *director);
+	Manager(int serial_number, Group *group);
 	int GetSerialNumber();
-	Director* GetDirector();
-	void GetCoreForSrand();
+	Group* GetGroup();
 };

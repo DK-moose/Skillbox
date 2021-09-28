@@ -1,22 +1,22 @@
-﻿#include "group.h"
+﻿#include "director.h"
 
 using namespace std;
 int main()
 {
 	int numberOfGroups, numberOfWorkersInGroup, command, numberOfTasks;
 	Director *director = new Director();
-	vector<Group*> groups;
 	cout << "Input number of groups: ";
 	cin >> numberOfGroups;
+	vector<Manager*> managers;
 	for (int i = 0; i < numberOfGroups; i++)
 	{
 		cout << "Input number of workers in group " << i + 1 << ": ";
 		cin >> numberOfWorkersInGroup;
 		Group *group = new Group(numberOfWorkersInGroup);
-		group->SetManager(new Manager(i + 1, director));
-		group->InitWorkers();		
-		groups.push_back(group);
+		group->InitWorkers();
+		managers.push_back(new Manager(i + 1, group));			
 	}
+	director->SetManagers(managers);
 
 	int full;
 	while (true)
@@ -24,31 +24,39 @@ int main()
 		full = 0;
 		cout << "Input the director's command (integer): ";
 		cin >> command;
+		director->SetIdCommand(command);
 		for (int i = 0; i < numberOfGroups; i++)
 		{
-			groups[i]->GetManager()->GetDirector()->SetIdCommand(command);
-			groups[i]->GetManager()->GetCoreForSrand();
-			numberOfTasks = rand() % groups[i]->GetNumberOfWorkers() + 1;
-			int start = groups[i]->GetBusyWorkers();
-			if (start != groups[i]->GetNumberOfWorkers())
+			srand(command + director->GetManager(i)->GetSerialNumber());
+			Group *group = director->GetManager(i)->GetGroup();
+			numberOfTasks = rand() % group->GetNumberOfWorkers() + 1;
+			int start = group->GetBusyWorkers();
+			if (start != group->GetNumberOfWorkers())
 			{
-				for (int j = start; j < groups[i]->GetNumberOfWorkers() && numberOfTasks > 0; j++)
+				for (int j = start; j < group->GetNumberOfWorkers() && numberOfTasks > 0; j++)
 				{
-					groups[i]->GetWorker(j)->SetWorkerFlag(true);
-					groups[i]->GetWorker(j)->SetTypeTask();
+					group->GetWorker(j)->SetWorkerFlag(true);
+					group->GetWorker(j)->SetTypeTask();
 					numberOfTasks--;
 				}
 			}
-			if (groups[i]->GetBusyWorkers() == groups[i]->GetNumberOfWorkers())
+			if (group->GetBusyWorkers() == group->GetNumberOfWorkers())
 				full++;
 		}
 		for (int i = 0; i < numberOfGroups; i++)
-			groups[i]->PrintInformation();
+		{
+			cout << "Director command - " << director->GetIdCommand() << endl;
+			cout << "Manager serial number - " << director->GetManager(i)->GetSerialNumber() << endl;
+			director->GetManager(i)->GetGroup()->PrintInformation();
+		}
 		if (full == numberOfGroups) break;
 	}
 	cout << "All workers got a job!" << endl;
 	for (int i = 0; i < numberOfGroups; i++)
-		delete groups[i];
+	{
+		delete director->GetManager(i)->GetGroup();
+		delete director->GetManager(i);
+	}
 	delete director;
 	return 0;
 }

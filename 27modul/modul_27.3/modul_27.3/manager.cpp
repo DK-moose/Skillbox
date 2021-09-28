@@ -1,9 +1,9 @@
 ﻿#include "manager.h"
 
-Manager::Manager(int serial_number, Director *director)
+Manager::Manager(int serial_number, Group *group)
 {
 	this->serial_number = serial_number;
-	this->director = director;
+	this->group = group;
 }
 
 int Manager::GetSerialNumber()
@@ -11,12 +11,7 @@ int Manager::GetSerialNumber()
 	return serial_number;
 }
 
-Director* Manager::GetDirector()
+Group* Manager::GetGroup()
 {
-	return director;
-}
-
-void Manager::GetCoreForSrand()
-{
-	srand(director->GetIdCommand() + serial_number);
+	return group;
 }
