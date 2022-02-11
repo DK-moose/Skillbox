@@ -7,33 +7,46 @@
 using namespace std;
 
 vector<Train*> trains(3);
-mutex m;
+mutex _station;
+mutex _output;
 bool stationIsFree = true;
 
 void wait_for_depart(int index)
 {
-	this_thread::sleep_for(chrono::seconds(trains[index]->GetTravelTime()));
-	
+	this_thread::sleep_for(chrono::seconds(trains[index]->GetTravelTime()));	
 	if (!stationIsFree)
+	{
+		_output.lock();
 		cout << "\nTrain " << trains[index]->GetName() << " is waiting for an empty seat!" << endl;
-	m.lock();
+		_output.unlock();
+	}
+	_station.lock();
     stationIsFree = false;
 	string commandForTrain;
+
 	while (true)
 	{
+		_output.lock();
 		cout << "Train " << trains[index]->GetName() << " has arrived and ready to depart!" << endl;
 		cout << "Input command 'depart' to release the station!" << endl;
+		_output.unlock();
 		cin >> commandForTrain;
 		if (commandForTrain != "depart")
+		{
+			_output.lock();
 			cout << "Invalid command! Try again" << endl;
+			_output.unlock();
+		}
 		else
 		{
+			_output.lock();
 			stationIsFree = true;
 			cout << "\nThe train " << trains[index]->GetName() << " left the station!" << endl;
+			_output.unlock();
 			break;
 		}
 	}
-	m.unlock();
+	_station.unlock();
 }
 
 int main()

@@ -1,9 +1,10 @@
 #include "order.h"
 
-Order::Order(string nameOfDish, int orderStatus)
+Order::Order(int orderNumber, string nameOfDish, int _orderStatus)
 {
+	this->orderNumber = orderNumber;
 	this->nameOfDish = nameOfDish;
-	this->orderStatus = orderStatus;
+	this->_orderStatus = _orderStatus;
 }
 
 string Order::GetNameOfDish()
@@ -13,31 +14,31 @@ string Order::GetNameOfDish()
 
 int Order::GetOrderStatus()
 {
-	return orderStatus;
+	return _orderStatus;
 }
 
-void Order::SetOrderStatuts(int orderStatus)
+void Order::SetOrderStatus(int _orderStatus)
 {
-	this->orderStatus = orderStatus;
+	this->_orderStatus = _orderStatus;
 }
 
 void Order::GetOrderStatusMessage()
 {
-	if (orderStatus == 1)
+	if (_orderStatus == 1)
 	{
-		cout << "The order \"" << nameOfDish << "\" is accepted!" << endl;
+		cout << "The order N"<< orderNumber << " \"" << nameOfDish << "\" is accepted!" << endl;
 	}
-	else if (orderStatus == 2)
+	else if (_orderStatus == 2)
 	{
-		cout << "The order \"" << nameOfDish << "\" is being prepared!" << endl;
+		cout << "The order N" << orderNumber << " \"" << nameOfDish << "\" is being prepared!" << endl;
 	}
-	else if (orderStatus == 3)
+	else if (_orderStatus == 3)
 	{
-		cout << "The order \"" << nameOfDish << "\" is ready!" << endl;
+		cout << "The order N" << orderNumber << " \"" << nameOfDish << "\" is ready!" << endl;
 	}
-	else if (orderStatus == 4)
+	else if (_orderStatus == 4)
 	{
-		cout << "The order \"" << nameOfDish << "\" is delivered!" << endl;
+		cout << "The order N" << orderNumber << " \"" << nameOfDish << "\" is delivered!" << endl;
 	}
 	else cout << "Error: invalid order status code!" << endl;
 }

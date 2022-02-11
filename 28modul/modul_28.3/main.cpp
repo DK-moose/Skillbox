@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <vector>
 #include <string>
+#include <time.h>
 #include <thread>
 #include <mutex>
 #include "order.h"
@@ -8,13 +9,11 @@
 using namespace std;
 
 enum dishes {pizza = 1, soup, steak, salad, sushi};
-
 vector<Order*> orders;
-mutex accepted;
+mutex _accepted;
 bool kitchenIsFree = true;
-vector<Order*> readyOrders;
-mutex cooking;
-mutex delivering;
+mutex _cooking;
+mutex _delivering;
 
 string DishToString(int dishCode)
 {
@@ -31,12 +30,12 @@ string DishToString(int dishCode)
 	else return "";
 }
 
-bool AllOrdersDelivered()
+bool OneStatusForAllOrders(int status)
 {
 	int countOrders = 0;
-	for (int i = 0; i < orders.size() && countOrders < 10; i++)
+	for (int i = 0; i < orders.size(); i++)
 	{
-		if (orders[i]->GetOrderStatus() != DELIVERED)
+		if (orders[i]->GetOrderStatus() != status)
 			return false;
 		else countOrders++;
 	}
@@ -45,64 +44,75 @@ bool AllOrdersDelivered()
 	return true;
 }
 
+int SearchAcceptedOrder()
+{
+	for (int i = 0; i < orders.size(); i++)
+		if (orders[i]->GetOrderStatus() == accepted)
+			return i;
+	return -1;
+}
+
 void wait_for_order()
 {
 	srand(time(nullptr));
-	this_thread::sleep_for(chrono::seconds(rand() % 5 + 6));
-	int dish = rand() % 5 + 1;
-	accepted.lock();
-	orders.push_back(new Order(DishToString(dish), ACCEPTED));
-	orders[orders.size() - 1]->GetOrderStatusMessage();
-	accepted.unlock();
+	int _orderNumber = 0;
+	while (_orderNumber < 10)
+	{
+		this_thread::sleep_for(chrono::seconds(rand() % 5 + 6));
+		int dish = rand() % 5 + 1;
+		_accepted.lock();
+		orders.push_back(new Order(_orderNumber + 1, DishToString(dish), accepted));
+		orders[_orderNumber]->GetOrderStatusMessage();
+		_accepted.unlock();
+		_orderNumber++;
+	} 
 }
 
 void wait_for_cooking()
 {
-	cooking.lock();
-	int i = 0;
-	while (orders[i]->GetOrderStatus() != ACCEPTED && i < orders.size())
-	{
-		i++;
-	}
-	orders[i]->SetOrderStatuts(COOKING);
-	orders[i]->GetOrderStatusMessage();
-	this_thread::sleep_for(chrono::seconds(rand() % 10 + 6));
-	orders[i]->SetOrderStatuts(READY);
-	orders[i]->GetOrderStatusMessage();
-	cooking.unlock();
-	kitchenIsFree = true;
-}
-
-void wait_for_delivery()
-{
-	this_thread::sleep_for(chrono::seconds(30));
-
-	for (int i = 0; i < orders.size(); i++)
-	{
-		if (orders[i]->GetOrderStatus() == READY)
-		{
-			orders[i]->SetOrderStatuts(DELIVERED);
-			orders[i]->GetOrderStatusMessage();
-		}
+	int countReadyOrders = 0;
+	int indexAcceptedOrder = 0;
+	while(countReadyOrders < 10)
+	{		
+		_cooking.lock();
+		orders[indexAcceptedOrder]->SetOrderStatus(cooking);
+		orders[indexAcceptedOrder]->GetOrderStatusMessage();
+		_cooking.unlock();
+		this_thread::sleep_for(chrono::seconds(rand() % 10 + 6));
+		_cooking.lock();
+		orders[indexAcceptedOrder]->SetOrderStatus(ready);
+		orders[indexAcceptedOrder]->GetOrderStatusMessage();
+		countReadyOrders++;		
+		_cooking.unlock();
+		while(SearchAcceptedOrder() == -1)
+			continue;
+		_cooking.lock();
+		indexAcceptedOrder = SearchAcceptedOrder();
+		_cooking.unlock();
 	}
 }
 
 int main()
 {
-	while(true)
+	thread order_t(wait_for_order); 
+	while (orders.size() < 1)
+		continue;
+	thread cooking_t(wait_for_cooking);
+	while (!OneStatusForAllOrders(delivered))
 	{
-		thread order_t(wait_for_order);
-		order_t.join();
-		if (kitchenIsFree)
+		this_thread::sleep_for(chrono::seconds(30));
+		_delivering.lock();
+		for (int i = 0; i < orders.size(); i++)
 		{
-			kitchenIsFree = false;
-			thread cooking_t(wait_for_cooking);
-			cooking_t.detach();
+			if (orders[i]->GetOrderStatus() == ready)
+			{
+				orders[i]->SetOrderStatus(delivered);
+				orders[i]->GetOrderStatusMessage();
+			}
 		}
-		thread delivery_t(wait_for_delivery);
-		delivery_t.detach();
-		if (AllOrdersDelivered())
-			break;
+		_delivering.unlock();
 	}
+	order_t.join();
+	cooking_t.detach();
 	return 0;
 }

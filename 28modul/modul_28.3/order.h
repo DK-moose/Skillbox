@@ -3,22 +3,19 @@
 #include <iostream>
 #include <string>
 
-#define ACCEPTED 1
-#define COOKING 2
-#define READY 3
-#define DELIVERED 4
-
 using namespace std;
+enum orderStatus {accepted = 1, cooking, ready, delivered};
 class Order
 {
 private:
+	int orderNumber;
 	string nameOfDish;
-	int orderStatus;
+	int _orderStatus;
 
 public:
-	Order(string nameOfDish, int orderStatus);
+	Order(int orderNumber, string nameOfDish, int _orderStatus);
 	string GetNameOfDish();
 	int GetOrderStatus();
-	void SetOrderStatuts(int orderStatus);
+	void SetOrderStatus(int _orderStatus);
 	void GetOrderStatusMessage();
 };
