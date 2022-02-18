@@ -6,16 +6,10 @@ using namespace std;
 class Animal
 {
 private: 
-	string typeAnimal;
 	string sound1;
 	string sound2;
 
 public:
-	virtual string GetTypeAnimal()
-	{
-		return typeAnimal;
-	}
-
 	virtual string GetFirstSound()
 	{
 		return sound1;
@@ -31,16 +25,10 @@ public:
 class Dog : virtual public Animal
 {
 private:
-	string typeAnimal = "Dog";
 	string sound1 = "Bark";
 	string sound2 = "Woof";
 
 public:
-	string GetTypeAnimal()
-	{
-		return typeAnimal;
-	}
-
 	string GetFirstSound()
 	{
 		return sound1;
@@ -54,17 +42,10 @@ public:
 
 class Cat : virtual public Animal
 {
-private:
-	string typeAnimal = "Cat";
 	string sound1 = "Meow";
 	string sound2 = "Purr";
 
 public:
-	string GetTypeAnimal()
-	{
-		return typeAnimal;
-	}
-
 	string GetFirstSound()
 	{
 		return sound1;
@@ -78,7 +59,7 @@ public:
 
 void meeting(Animal* a, Animal* b)
 {
-	if (a->GetTypeAnimal() == b->GetTypeAnimal())
+	if (a->GetSecondSound() == b->GetSecondSound())
 		cout << a->GetSecondSound() << " " << b->GetSecondSound() << endl;
 	else
 		cout << a->GetFirstSound() << " " << b->GetFirstSound() << endl;
