@@ -56,6 +56,7 @@ public:
 		toy = new Toy(*otherToy.toy);
 		*otherToy.linkCounter = *otherToy.linkCounter + 1;
 		linkCounter = otherToy.linkCounter;
+		return *this;
 	};
 
 	void PtintSharedPtrToy()
