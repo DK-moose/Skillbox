@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>785</width>
+    <height>521</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>785</width>
+    <height>521</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="fileName">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPlainTextEdit" name="plainTextEdit"/>
+      </item>
+      <item>
+       <widget class="QWidget" name="webView" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>382</width>
+          <height>430</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>785</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Меню</string>
+    </property>
+    <addaction name="menuOpenFile"/>
+    <addaction name="menuSave"/>
+    <addaction name="menuSaveAs"/>
+    <addaction name="separator"/>
+    <addaction name="menuHideEditor"/>
+    <addaction name="menuHideWebView"/>
+    <addaction name="separator"/>
+    <addaction name="menuExit"/>
+   </widget>
+   <addaction name="menu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="menuSave">
+   <property name="text">
+    <string>Сохранить</string>
+   </property>
+  </action>
+  <action name="menuSaveAs">
+   <property name="text">
+    <string>Сохранить как ...</string>
+   </property>
+  </action>
+  <action name="menuOpenFile">
+   <property name="text">
+    <string>Открыть файл</string>
+   </property>
+  </action>
+  <action name="menuHideEditor">
+   <property name="text">
+    <string>Скрыть редактор</string>
+   </property>
+  </action>
+  <action name="menuHideWebView">
+   <property name="text">
+    <string>Скрыть WebView</string>
+   </property>
+  </action>
+  <action name="menuExit">
+   <property name="text">
+    <string>Выйти</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
